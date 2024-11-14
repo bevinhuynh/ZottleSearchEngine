@@ -52,19 +52,19 @@ class InvertedIndex:
             self.index[token].append(posting)
 
     def save_index_with_analytics(self, file_path):
+        
+        with open(file_path, 'w') as file:
+            for term, postings in self.index.items():
+                postings_str = "; ".join([f"(doc_id: {posting['doc_id']}, tf: {posting['tf']})" for posting in postings])
+                file.write(f"{term}: {postings_str}\n")
+                
         num_docs = len(set([posting['doc_id'] for postings in self.index.values() for posting in postings]))
         num_unique_tokens = len(self.index)
-        analytics = f"Documents indexed: {num_docs}\nUnique tokens: {num_unique_tokens}\n"
+        index_size_kb = os.path.getsize(file_path) / 1024
+        analytics = f"Documents indexed: {num_docs}\nUnique tokens: {num_unique_tokens}\nSize: {index_size_kb:.2f} KB\n"
 
         with open(file_path, 'w') as file:
             file.write(analytics)
-            # for term, postings in self.index.items():
-            #     postings_str = "; ".join([f"(doc_id: {posting['doc_id']}, tf: {posting['tf']})" for posting in postings])
-            #     file.write(f"{term}: {postings_str}\n")
-            
-        index_size_kb = os.path.getsize(file_path) / 1024
-        with open(file_path, 'a') as file:
-            file.write(f"\nSize: {index_size_kb:.2f} KB\n")
 
         print(f"Index saved to {file_path}, size: {index_size_kb:.2f} KB")
 
