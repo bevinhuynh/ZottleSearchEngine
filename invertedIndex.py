@@ -95,4 +95,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main() #To use: python3 invertedIndex.py "path to directory containing subdirectories and files to parse" "path to output"
