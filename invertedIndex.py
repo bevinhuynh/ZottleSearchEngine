@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from nltk.stem.porter import PorterStemmer
 from collections import defaultdict
 
+
 class JSONHTMLParser:
     def __init__(self):
         self.stemmer = PorterStemmer()
@@ -20,32 +21,29 @@ class JSONHTMLParser:
         if 'content' not in data:
             return []
 
-        soup = BeautifulSoup(data['content'], 'html.parser')
+        soup = BeautifulSoup(data['content'], 'lxml')
         tokens = []
 
         for tag in soup.find_all(['b', 'h1', 'h2', 'h3', 'title', 'p']):
             tag_text = tag.get_text()
             for word in self.tokenize(tag_text):
                 stemmed_word = self.stemmer.stem(word)
-                importance = self.get_importance(tag.name)
-                tokens.append((stemmed_word, importance))
+                tokens.append(stemmed_word)
 
         return tokens
 
     def tokenize(self, text):
         return [word.lower() for word in text.split() if word.isalnum()]
 
-    def get_importance(self, tag_name):
-        return {'h1': 3, 'title': 3, 'h2': 2, 'h3': 2, 'b': 1.5}.get(tag_name, 1)
 
 class InvertedIndex:
     def __init__(self):
         self.index = defaultdict(list)
 
     def add_document(self, doc_id, tokens):
-        tf_dict = defaultdict(float)
-        for token, importance in tokens:
-            tf_dict[token] += importance
+        tf_dict = defaultdict(int)
+        for token in tokens:
+            tf_dict[token] += 1  # Count occurrences of each token
 
         for token, tf in tf_dict.items():
             posting = {'doc_id': doc_id, 'tf': tf}
@@ -68,19 +66,20 @@ class InvertedIndex:
 
         print(f"Index saved to {file_path}, size: {index_size_kb:.2f} KB")
 
+
 def process_folder(folder_path, index):
     parser = JSONHTMLParser()
     processed_files = 0
 
     for root, _, files in os.walk(folder_path):
         for filename in files:
-
             if filename.endswith(".json"):
                 file_path = os.path.join(root, filename)
 
                 tokens = parser.parse_json_html(file_path)
                 index.add_document(filename, tokens)
                 processed_files += 1
+
 
 def main():
     parser = argparse.ArgumentParser(description="Build an inverted index from JSON files containing HTML content.")
@@ -93,6 +92,7 @@ def main():
     process_folder(args.folder_path, index)
     
     index.save_index_with_analytics(args.output_file)
+
 
 if __name__ == "__main__":
     main()
