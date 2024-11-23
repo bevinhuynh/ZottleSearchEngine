@@ -9,26 +9,30 @@ class SearchEngine:
         self.index, self.doc_urls = self.load_index(index_path)
 
     def load_index(self, index_path):
+        #loads in inverted index (.json file) to create a dictionary
         try:
             with open(index_path, 'r', encoding='utf-8') as file:
                 data = json.load(file)
                 return data['index'], data['doc_urls']
+                #data['index']: The inverted index (maps terms to their document postings).
+                #data['doc_urls']: Maps document IDs to their URLs
         except FileNotFoundError:
             print(f"Index file {index_path} not found.")
             return {}, {}
 
     def calculate_idf(self, term):
-        """Calculate Inverse Document Frequency (IDF)."""
+        # Calculate Inverse Document Frequency (IDF) -- measures how rare/unique the term is across all documents
         doc_freq = len(self.index.get(term, []))
         if doc_freq == 0:
             return 0
         return log(self.doc_count / doc_freq)
 
-    @property
+    @property #makes it read-only -- cleaner code
     def doc_count(self):
         return len(self.doc_urls)
 
     def search(self, query):
+        #The search method processes a user's query and finds the most relevant documents using TF-IDF scoring.
         stemmer = PorterStemmer()
         query_terms = [stemmer.stem(term.lower()) for term in query.split() if term.isalnum()]
         if not query_terms:
@@ -54,7 +58,7 @@ class SearchEngine:
             print("No results found.")
             return
 
-        print(f"Top {min(top_n, len(results))} results:")
+        print(f"Top {min(top_n, len(results))} results:")  #displays top 5 results
         for rank, (url, score) in enumerate(results[:top_n], start=1):
             print(f"{rank}. {url} (Score: {score:.4f})")
 
