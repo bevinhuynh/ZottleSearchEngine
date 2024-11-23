@@ -61,6 +61,8 @@ class SearchEngine:
 
 def main():
     import argparse
+    import time
+
     parser = argparse.ArgumentParser(description="Terminal-based Search Engine")
     parser.add_argument("index_path", type=str, help="Path to the saved inverted index.")
     args = parser.parse_args()
@@ -68,14 +70,17 @@ def main():
     engine = SearchEngine(args.index_path)
 
     while True:
-        query = input("Enter your search query (type 'exit' to quit): ")
+        query = input("Enter query (type exit to stop): ")
         if query.lower() == 'exit':
             print("Exiting search engine.")
             break
-
+        startTime = time.perf_counter()
         results = engine.search(query)
-        engine.display_results(results)
+        endTime = time.perf_counter()
 
+        totalTime = (endTime - startTime) * 1000 #calculates time in millisecond
+        engine.display_results(results)
+        print(f"Query processed in {totalTime:.2f} ms")
 
 if __name__ == "__main__":
     main()
