@@ -1,179 +1,163 @@
 import os
 import json
+import math
 from collections import defaultdict
 from bs4 import BeautifulSoup
 from nltk.stem.porter import PorterStemmer
 
 
-class JSONHTMLParser:
-    def __init__(self):
-        self.stemmer = PorterStemmer()
-
-    def parse_json_html(self, document_path):
-        try:
-            with open(document_path, 'r', encoding="utf-8") as file:
-                data = json.load(file)
-        except (json.JSONDecodeError, UnicodeDecodeError) as e:
-            print(f"Error parsing {document_path}: {e}")
-            return [], None
-
-        if 'content' not in data or 'url' not in data:
-            return [], None
-
-        soup = BeautifulSoup(data['content'], 'lxml')
-        tokens = []
-
-        # Assign weights to tags
-        tag_weights = {'title': 5, 'h1': 4, 'h2': 3, 'h3': 2, 'p': 1, 'b': 1}
-
-        for tag, weight in tag_weights.items():
-            for element in soup.find_all(tag):
-                for word in self.tokenize(element.get_text()):
-                    stemmed_word = self.stemmer.stem(word)
-                    tokens.extend([stemmed_word] * weight)  # Weighted tokens
-
-        return tokens, data['url']
-
-    def tokenize(self, text):
-        return [word.lower() for word in text.split() if word.isalnum()]
-
-
 class InvertedIndex:
     def __init__(self):
-        self.index = defaultdict(list)
+        self.index = defaultdict(lambda: {'token_freq': 0, 'document_freq': 0, 'doc_ids': {}})
         self.doc_count = 0  # Total number of documents
         self.doc_urls = {}  # Map doc_id to URL
+        self.stemmer = PorterStemmer()
 
-    def add_document(self, doc_id, tokens, url):
-        tf_dict = defaultdict(int)
+    def add_document(self, doc_id, content, url):
+        soup = BeautifulSoup(content, 'lxml')
+        tokens = self.tokenize_and_stem(soup.get_text())
+        self.doc_urls[doc_id] = url
+
+        term_freqs = defaultdict(int)
         for token in tokens:
-            tf_dict[token] += 1
+            term_freqs[token] += 1
 
-        for token, tf in tf_dict.items():
-            posting = {'doc_id': doc_id, 'tf': tf}
-            self.index[token].append(posting)
+        for token, freq in term_freqs.items():
+            self.index[token]['token_freq'] += freq
+            if doc_id not in self.index[token]['doc_ids']:
+                self.index[token]['doc_ids'][doc_id] = {'freq': 0, 'tf_idf': 0}
+                self.index[token]['document_freq'] += 1
+            self.index[token]['doc_ids'][doc_id]['freq'] = freq
 
         self.doc_count += 1
-        self.doc_urls[doc_id] = url
+
+    def tokenize_and_stem(self, text):
+        tokens = [word.lower() for word in text.split() if word.isalnum()]
+        return [self.stemmer.stem(token) for token in tokens]
 
     def save_partial_index(self, file_path):
         with open(file_path, 'w', encoding='utf-8') as file:
             json.dump({
                 'index': self.index,
-                'doc_urls': self.doc_urls
+                'doc_urls': self.doc_urls,
+                'doc_count': self.doc_count
             }, file, indent=4)
         print(f"Partial index saved to {file_path}")
 
-    def merge_index(self, other_index):
-        """
-        Merge another InvertedIndex object into the current index.
-        """
-        for term, postings in other_index.index.items():
-            self.index[term].extend(postings)
-        self.doc_urls.update(other_index.doc_urls)
-        self.doc_count += other_index.doc_count
+    def merge_partial_indexes(self, partial_index_files, merged_index_path):
+        merged_index = defaultdict(lambda: {'token_freq': 0, 'document_freq': 0, 'doc_ids': {}})
+        doc_urls = {}
+        doc_count = 0
 
-    def save_index_with_analytics(self, file_path):
-        """
-        Save the final merged index and generate analytics.
-        """
-        # Calculate document lengths for normalization (if needed for TF-IDF)
-        doc_lengths = {}
-        for doc_id in self.doc_urls:
-            length = 0
-            for term, postings in self.index.items():
-                for posting in postings:
-                    if posting['doc_id'] == doc_id:
-                        length += posting['tf'] ** 2  # Sum of squared term frequencies
-            doc_lengths[doc_id] = length ** 0.5  # Euclidean norm
+        for partial_file in partial_index_files:
+            with open(partial_file, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                for token, entry in data['index'].items():
+                    if token not in merged_index:
+                        merged_index[token] = entry
+                    else:
+                        merged_index[token]['token_freq'] += entry['token_freq']
+                        merged_index[token]['document_freq'] += entry['document_freq']
+                        merged_index[token]['doc_ids'].update(entry['doc_ids'])
+                doc_urls.update(data['doc_urls'])
+                doc_count += data['doc_count']
 
-        # Save the index and metadata
-        with open(file_path, 'w', encoding='utf-8') as file:
+        with open(merged_index_path, 'w', encoding='utf-8') as file:
             json.dump({
-                'index': self.index,
-                'doc_urls': self.doc_urls,
-                'doc_lengths': doc_lengths
+                'index': merged_index,
+                'doc_urls': doc_urls,
+                'doc_count': doc_count
             }, file, indent=4)
+        print(f"Merged index saved to {merged_index_path}")
 
-        # Generate and print analytics
-        num_unique_terms = len(self.index)
-        index_size_kb = os.path.getsize(file_path) / 1024
-        print(f"Final index saved to {file_path}")
-        print(f"Total documents: {self.doc_count}")
-        print(f"Unique terms: {num_unique_terms}")
-        print(f"Index size: {index_size_kb:.2f} KB")
+    def calculate_tfidf(self, merged_index_path):
+        """
+        Calculate TF-IDF values for all terms in the merged index and save the updated index.
+        """
+        with open(merged_index_path, 'r', encoding='utf-8') as infile:
+            data = json.load(infile)
+
+        index = data['index']
+        doc_count = data['doc_count']
+
+        # Debugging: Ensure doc_count is correct
+        if doc_count == 0:
+            print("Error: Document count is 0. No documents to calculate TF-IDF.")
+            return
+
+        # Iterate over all terms in the index
+        for token, entry in index.items():
+            # Debugging: Check document frequency
+            if entry['document_freq'] == 0:
+                print(f"Skipping token '{token}' with document frequency 0.")
+                continue
+
+            # Calculate IDF for the term
+            idf = math.log10(doc_count / entry['document_freq'])
+
+            # Debugging: Print IDF
+            print(f"Token: {token}, IDF: {idf}")
+
+            # Update TF-IDF for each document containing the term
+            for doc_id, doc_data in entry['doc_ids'].items():
+                if doc_data['freq'] > 0:  # Ensure term frequency is valid
+                    tf = 1 + math.log10(doc_data['freq'])
+                    doc_data['tf_idf'] = tf * idf  # Assign TF-IDF
+
+                    # Debugging: Print TF-IDF values
+                    print(f"Doc ID: {doc_id}, TF: {tf}, TF-IDF: {doc_data['tf_idf']}")
+                else:
+                    doc_data['tf_idf'] = 0  # Assign 0 TF-IDF if term frequency is zero
+
+        # Save the updated index back to the file
+        with open(merged_index_path, 'w', encoding='utf-8') as outfile:
+            json.dump(data, outfile, indent=4)
+
+        print("TF-IDF values calculated and saved.")
 
 
-def process_folder(folder_path, output_dir, batch_size=1000):
-    parser = JSONHTMLParser()
-    processed_files = 0
-    batch_number = 1
 
-    # Initialize an empty index for the current batch
-    current_index = InvertedIndex()
+
+def process_folder(folder_path, partial_index_dir, batch_size=1000):
+    index = InvertedIndex()
+    doc_id = 0
+    processed_docs = 0
+    partial_index_files = []
 
     for root, _, files in os.walk(folder_path):
         for filename in files:
-            if filename.endswith(".json"):
-                file_path = os.path.join(root, filename)
+            if filename.endswith('.json'):
+                with open(os.path.join(root, filename), 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+                    if 'content' in data and 'url' in data:
+                        index.add_document(doc_id, data['content'], data['url'])
+                        doc_id += 1
+                        processed_docs += 1
 
-                tokens, url = parser.parse_json_html(file_path)
-                if tokens and url:
-                    current_index.add_document(filename, tokens, url)
-                    processed_files += 1
+                if processed_docs % batch_size == 0:
+                    partial_path = os.path.join(partial_index_dir, f'partial_index_{processed_docs // batch_size}.json')
+                    index.save_partial_index(partial_path)
+                    partial_index_files.append(partial_path)
+                    index = InvertedIndex()
 
-                # Save partial index and reset when batch size is reached
-                if processed_files % batch_size == 0:
-                    partial_index_file = os.path.join(output_dir, f"partial_index_{batch_number}.json")
-                    current_index.save_partial_index(partial_index_file)
-                    current_index = InvertedIndex()  # Reset for the next batch
-                    batch_number += 1
+    if processed_docs % batch_size != 0:
+        partial_path = os.path.join(partial_index_dir, f'partial_index_{processed_docs // batch_size + 1}.json')
+        index.save_partial_index(partial_path)
+        partial_index_files.append(partial_path)
 
-    # Save any remaining documents in the last batch
-    if current_index.doc_count > 0:
-        partial_index_file = os.path.join(output_dir, f"partial_index_{batch_number}.json")
-        current_index.save_partial_index(partial_index_file)
-
-
-def merge_partial_indexes(output_dir, final_index_path):
-    final_index = InvertedIndex()
-
-    for root, _, files in os.walk(output_dir):
-        for filename in files:
-            if filename.startswith("partial_index_") and filename.endswith(".json"):
-                file_path = os.path.join(root, filename)
-
-                with open(file_path, 'r', encoding='utf-8') as file:
-                    partial_data = json.load(file)
-                    partial_index = InvertedIndex()
-                    partial_index.index = defaultdict(list, partial_data['index'])
-                    partial_index.doc_urls = partial_data['doc_urls']
-                    partial_index.doc_count = len(partial_index.doc_urls)
-
-                    final_index.merge_index(partial_index)
-
-    # Save the final merged index
-    final_index.save_index_with_analytics(final_index_path)
-
-
-def main():
-    import argparse
-    parser = argparse.ArgumentParser(description="Build and save an inverted index from JSON files.")
-    parser.add_argument("folder_path", type=str, help="Path to the folder containing JSON files.")
-    parser.add_argument("output_dir", type=str, help="Directory to save partial index files.")
-    parser.add_argument("final_index_file", type=str, help="Path to save the final merged index (JSON format).")
-    parser.add_argument("--batch_size", type=int, default=1000, help="Number of files per batch.")
-    args = parser.parse_args()
-
-    # Ensure output directory exists
-    os.makedirs(args.output_dir, exist_ok=True)
-
-    # Process files and save partial indexes
-    process_folder(args.folder_path, args.output_dir, args.batch_size)
-
-    # Merge all partial indexes into a final index
-    merge_partial_indexes(args.output_dir, args.final_index_file)
+    return partial_index_files
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("folder_path", type=str, help="Folder containing JSON files.")
+    parser.add_argument("partial_index_dir", type=str, help="Directory to save partial indexes.")
+    parser.add_argument("final_index_file", type=str, help="Path to save the merged index.")
+    args = parser.parse_args()
+
+    partial_indexes = process_folder(args.folder_path, args.partial_index_dir)
+    index = InvertedIndex()
+    index.merge_partial_indexes(partial_indexes, args.final_index_file)
+    index.calculate_tfidf(args.final_index_file)
