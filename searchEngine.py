@@ -44,13 +44,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("index_path", type=str, help="Path to the JSON index file.")
     args = parser.parse_args()
+    engine = SearchEngine(args.index_path)
 
     while True:
         query = input("Enter query (type exit to stop): ")
         if query.lower() == 'exit':
             print("Exiting search engine.")
             break
-        engine = SearchEngine(args.index_path)
         startTime = time.perf_counter()
         results = engine.search(query)
         endTime = time.perf_counter()
