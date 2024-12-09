@@ -71,45 +71,37 @@ class InvertedIndex:
         print(f"Merged index saved to {merged_index_path}")
 
     def calculate_tfidf(self, merged_index_path):
-        """
-        Calculate TF-IDF values for all terms in the merged index and save the updated index.
-        """
         with open(merged_index_path, 'r', encoding='utf-8') as infile:
             data = json.load(infile)
 
         index = data['index']
         doc_count = data['doc_count']
 
-        # Debugging: Ensure doc_count is correct
         if doc_count == 0:
             print("Error: Document count is 0. No documents to calculate TF-IDF.")
             return
 
-        # Iterate over all terms in the index
+        # print statement for debugging
         for token, entry in index.items():
-            # Debugging: Check document frequency
             if entry['document_freq'] == 0:
                 print(f"Skipping token '{token}' with document frequency 0.")
                 continue
 
-            # Calculate IDF for the term
             idf = math.log10(doc_count / entry['document_freq'])
 
-            # Debugging: Print IDF
             print(f"Token: {token}, IDF: {idf}")
 
-            # Update TF-IDF for each document containing the term
             for doc_id, doc_data in entry['doc_ids'].items():
                 if doc_data['freq'] > 0:  # Ensure term frequency is valid
                     tf = 1 + math.log10(doc_data['freq'])
                     doc_data['tf_idf'] = tf * idf  # Assign TF-IDF
 
-                    # Debugging: Print TF-IDF values
+                    # debugging and printing tf-idf values
                     print(f"Doc ID: {doc_id}, TF: {tf}, TF-IDF: {doc_data['tf_idf']}")
                 else:
                     doc_data['tf_idf'] = 0  # Assign 0 TF-IDF if term frequency is zero
 
-        # Save the updated index back to the file
+        # save the updated index back to the file
         with open(merged_index_path, 'w', encoding='utf-8') as outfile:
             json.dump(data, outfile, indent=4)
 
@@ -147,7 +139,7 @@ def process_folder(folder_path, partial_index_dir, batch_size=1000):
 
     return partial_index_files
 
-
+# To run code -> python3 inve   rtedIndex.py "path to DEV folder" "path to partial_index folder" "path to final_index file (doesn't have to be created)"
 if __name__ == "__main__":
     import argparse
 
