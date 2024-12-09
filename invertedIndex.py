@@ -9,18 +9,30 @@ from nltk.stem.porter import PorterStemmer
 class InvertedIndex:
     def __init__(self):
         self.index = defaultdict(lambda: {'token_freq': 0, 'document_freq': 0, 'doc_ids': {}})
-        self.doc_count = 0  # Total number of documents
-        self.doc_urls = {}  # Map doc_id to URL
+        self.doc_count = 0  # total # of documents
+        self.doc_urls = {}  # dictionary to map doc_id to URLs
         self.stemmer = PorterStemmer()
 
     def add_document(self, doc_id, content, url):
         soup = BeautifulSoup(content, 'lxml')
-        tokens = self.tokenize_and_stem(soup.get_text())
         self.doc_urls[doc_id] = url
 
+        tag_weights = {
+            'title': 5,
+            'h1': 4,
+            'h2': 3,
+            'h3': 2,
+            'strong': 2,
+            'p': 1  
+        }
+
         term_freqs = defaultdict(int)
-        for token in tokens:
-            term_freqs[token] += 1
+
+        for tag, weight in tag_weights.items():
+            for element in soup.find_all(tag):
+                tokens = self.tokenize_and_stem(element.get_text())
+                for token in tokens:
+                    term_freqs[token] += weight
 
         for token, freq in term_freqs.items():
             self.index[token]['token_freq'] += freq
@@ -70,6 +82,7 @@ class InvertedIndex:
             }, file, indent=4)
         print(f"Merged index saved to {merged_index_path}")
 
+    # Calculate tf-idf scores
     def calculate_tfidf(self, merged_index_path):
         with open(merged_index_path, 'r', encoding='utf-8') as infile:
             data = json.load(infile)
@@ -92,22 +105,19 @@ class InvertedIndex:
             print(f"Token: {token}, IDF: {idf}")
 
             for doc_id, doc_data in entry['doc_ids'].items():
-                if doc_data['freq'] > 0:  # Ensure term frequency is valid
+                if doc_data['freq'] > 0: 
                     tf = 1 + math.log10(doc_data['freq'])
-                    doc_data['tf_idf'] = tf * idf  # Assign TF-IDF
+                    doc_data['tf_idf'] = tf * idf  
 
-                    # debugging and printing tf-idf values
                     print(f"Doc ID: {doc_id}, TF: {tf}, TF-IDF: {doc_data['tf_idf']}")
                 else:
-                    doc_data['tf_idf'] = 0  # Assign 0 TF-IDF if term frequency is zero
+                    doc_data['tf_idf'] = 0  
 
         # save the updated index back to the file
         with open(merged_index_path, 'w', encoding='utf-8') as outfile:
             json.dump(data, outfile, indent=4)
 
         print("TF-IDF values calculated and saved.")
-
-
 
 
 def process_folder(folder_path, partial_index_dir, batch_size=1000):
@@ -153,3 +163,4 @@ if __name__ == "__main__":
     index = InvertedIndex()
     index.merge_partial_indexes(partial_indexes, args.final_index_file)
     index.calculate_tfidf(args.final_index_file)
+
