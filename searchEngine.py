@@ -37,6 +37,7 @@ class SearchEngine:
         ranked_results = sorted(scores.items(), key=lambda x: x[1], reverse=True)
         return [(self.doc_urls[doc_id], score) for doc_id, score in ranked_results[:top_k]]
 
+# command to run -> python3 searchEngine.py "path to final_index"
 if __name__ == "__main__":
     import argparse
 
