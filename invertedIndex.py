@@ -9,34 +9,31 @@ from nltk.stem.porter import PorterStemmer
 class InvertedIndex:
     def __init__(self):
         self.index = defaultdict(lambda: {'token_freq': 0, 'document_freq': 0, 'doc_ids': {}})
-        self.doc_count = 0  # Total number of documents
-        self.doc_urls = {}  # Map doc_id to URL
+        self.doc_count = 0  
+        self.doc_urls = {}  
         self.stemmer = PorterStemmer()
 
     def add_document(self, doc_id, content, url):
         soup = BeautifulSoup(content, 'lxml')
         self.doc_urls[doc_id] = url
 
-        # Define tag weights
         tag_weights = {
             'title': 5,
             'h1': 4,
             'h2': 3,
             'h3': 2,
             'strong': 2,
-            'p': 1
+            'p': 1  
         }
 
         term_freqs = defaultdict(int)
 
-        # Extract and weigh tokens
         for tag, weight in tag_weights.items():
             for element in soup.find_all(tag):
                 tokens = self.tokenize_and_stem(element.get_text())
                 for token in tokens:
                     term_freqs[token] += weight
 
-        # Update index
         for token, freq in term_freqs.items():
             self.index[token]['token_freq'] += freq
             if doc_id not in self.index[token]['doc_ids']:
@@ -95,36 +92,29 @@ class InvertedIndex:
         index = data['index']
         doc_count = data['doc_count']
 
-        # Debugging: Ensure doc_count is correct
         if doc_count == 0:
             print("Error: Document count is 0. No documents to calculate TF-IDF.")
             return
 
-        # Iterate over all terms in the index
         for token, entry in index.items():
-            # Debugging: Check document frequency
             if entry['document_freq'] == 0:
                 print(f"Skipping token '{token}' with document frequency 0.")
                 continue
 
-            # Calculate IDF for the term
             idf = math.log10(doc_count / entry['document_freq'])
 
-            # Debugging: Print IDF
             print(f"Token: {token}, IDF: {idf}")
 
-            # Update TF-IDF for each document containing the term
             for doc_id, doc_data in entry['doc_ids'].items():
-                if doc_data['freq'] > 0:  # Ensure term frequency is valid
+                if doc_data['freq'] > 0: 
                     tf = 1 + math.log10(doc_data['freq'])
-                    doc_data['tf_idf'] = tf * idf  # Assign TF-IDF
+                    doc_data['tf_idf'] = tf * idf  
 
-                    # Debugging: Print TF-IDF values
                     print(f"Doc ID: {doc_id}, TF: {tf}, TF-IDF: {doc_data['tf_idf']}")
                 else:
-                    doc_data['tf_idf'] = 0  # Assign 0 TF-IDF if term frequency is zero
+                    doc_data['tf_idf'] = 0  
 
-        # Save the updated index back to the file
+    
         with open(merged_index_path, 'w', encoding='utf-8') as outfile:
             json.dump(data, outfile, indent=4)
 
