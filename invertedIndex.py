@@ -15,13 +15,28 @@ class InvertedIndex:
 
     def add_document(self, doc_id, content, url):
         soup = BeautifulSoup(content, 'lxml')
-        tokens = self.tokenize_and_stem(soup.get_text())
         self.doc_urls[doc_id] = url
 
-        term_freqs = defaultdict(int)
-        for token in tokens:
-            term_freqs[token] += 1
+        # Define tag weights
+        tag_weights = {
+            'title': 5,
+            'h1': 4,
+            'h2': 3,
+            'h3': 2,
+            'strong': 2,
+            'p': 1
+        }
 
+        term_freqs = defaultdict(int)
+
+        # Extract and weigh tokens
+        for tag, weight in tag_weights.items():
+            for element in soup.find_all(tag):
+                tokens = self.tokenize_and_stem(element.get_text())
+                for token in tokens:
+                    term_freqs[token] += weight
+
+        # Update index
         for token, freq in term_freqs.items():
             self.index[token]['token_freq'] += freq
             if doc_id not in self.index[token]['doc_ids']:
