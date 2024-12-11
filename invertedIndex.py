@@ -149,7 +149,7 @@ def process_folder(folder_path, partial_index_dir, batch_size=1000):
 
     return partial_index_files
 
-# To run code -> python3 inve   rtedIndex.py "path to DEV folder" "path to partial_index folder" "path to final_index file (doesn't have to be created)"
+# To run code -> python3 invertedIndex.py "path to DEV folder" "path to partial_index folder" "path to final_index file (doesn't have to be created)"
 if __name__ == "__main__":
     import argparse
 
