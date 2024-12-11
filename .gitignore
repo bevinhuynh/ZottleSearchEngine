@@ -1,6 +1,11 @@
 .DS_Store
 final_index.json
 partial_index/
+output_data.json
+__pycache__/
+output_analytics.txt
+results.txt
+
 # # Logs
 # logs
 # *.log
