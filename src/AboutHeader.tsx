@@ -4,12 +4,8 @@ function AboutHeader() {
     return (
         <>
             <div>
-                <div className='container'>
-                    <div className='row'>                       
-                            <a href='https://www.google.com/'id='about-link'>Hello</a>  
-                            <a href='https://github.com/TaylorTraan/SearchEngine' id='github-link'>Github</a>                                  
-                    </div>                   
-                </div>
+                <a href='https://www.google.com/'id='about-link'>About</a>  
+                 <a href='https://github.com/TaylorTraan/SearchEngine' id='github-link'>Github</a>                                  
             </div>
         </>
     )

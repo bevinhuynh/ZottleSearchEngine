@@ -41,16 +41,18 @@
 #about-link {
   position: absolute;
   top: 1em;
-  left: -29em;
+  left: 2em;
   font-size: 1em;
+  color: white;
   
 }
 
 #github-link {
   position: absolute;
   top: 1em;
-  left: -25em;
+  left: 6em;
   font-size: 1em;
+  color: white;
 }
 
 #buttons {
@@ -58,6 +60,8 @@
   justify-content: center;
   margin-bottom: 10em;
 }
+
+
 
 #search-bar-form {
   background-color: grey;
@@ -121,3 +125,34 @@
   color: white;
 }
 
+#zoogle-logo {
+  font-family: sans-serif;
+  letter-spacing: 1px;
+  font-size: 4.5em;
+}
+
+.letter.z { color: #4285F4; }   /* Z (Blue) */
+.letter.o1 { color: #EA4335; }  /* First o (Red) */
+.letter.o2 { color: #FBBC05; }  /* Second o (Yellow) */
+.letter.g { color: #4285F4; }   /* g (Blue) */
+.letter.l { color: #34A853; }   /* l (Green) */
+.letter.e { color: #EA4335; }   /* e (Red) */
+
+#setting-footer {
+  display: flex;
+  background-color: rgb(41, 39, 39);
+  width: 100vw; 
+  position: fixed; 
+  bottom: 0;
+  left: 0;
+  height: 50px;
+}
+
+#footer-content  {
+  position: absolute;
+  bottom:0;
+  right:0;
+  margin-right: 1em;
+  color: rgb(218, 211, 211);
+  font-size: 0.8em;
+}

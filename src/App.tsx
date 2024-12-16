@@ -15,7 +15,12 @@ function App() {
           </a>
         </div>
         <div className='row' id='title'>
-          <h1>Zoogle</h1>
+          <h1 id='zoogle-logo'><span className="letter z">Z</span>
+          <span className="letter o1">o</span>
+          <span className="letter o2">o</span>
+          <span className="letter g">g</span>
+          <span className="letter l">l</span>
+          <span className="letter e">e</span></h1>
         </div>
         <div className='row' id='searchbar'>
           <form id='search-bar-form'>
@@ -30,23 +35,13 @@ function App() {
           <div className='col' id='lucky-button'>
             <button>I'm feeling lucky</button> 
           </div>
-        </div>
-       
+        </div>      
       </div>
-
-
-      {/* <h1>Zoogle</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
+      <footer className="mt-auto " id='setting-footer'>
+          <div>
+            <p id='footer-content'>Dark Mode (Light Mode coming soon)</p>
+          </div>
+        </footer>
     </>
   )
 }
