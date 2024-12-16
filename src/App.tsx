@@ -1,14 +1,12 @@
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
+import {changeThemeMode} from "./helpers"
 import './App.css'
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {
 
   return (
     <>
-      <div className='container-fluid'>
+      <div className='container-fluid' id="main-container">
         <div className='row'>
           <a>
             <img src="../src/assets/anteater.svg" className="anteater" alt="Anteater logo" id="anteater" />
@@ -39,7 +37,7 @@ function App() {
       </div>
       <footer className="mt-auto " id='setting-footer'>
           <div>
-            <p id='footer-content'>Dark Mode (Light Mode coming soon)</p>
+            <p id='footer-content' onClick={changeThemeMode}>Dark Mode</p>
           </div>
         </footer>
     </>

@@ -156,3 +156,13 @@
   color: rgb(218, 211, 211);
   font-size: 0.8em;
 }
+
+#footer-content:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  
+}
+
+#main-container {
+  margin-bottom: 15em;
+}
