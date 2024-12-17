@@ -33,7 +33,7 @@ export async function fetch_query_results() {
         body: JSON.stringify(search_input.value)
     });
     if (response.ok) {
-        console.log("good test run");
+        console.log(await response.json());
     }
     
 }

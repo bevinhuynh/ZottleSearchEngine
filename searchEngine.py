@@ -49,12 +49,8 @@ def process_query():
     results = engine.search(query)
     endTime = time.perf_counter()
     totalTime = (endTime - startTime) * 1000
-    print(f"Query processed in {totalTime:.2f} ms")
-    for rank, (url, score) in enumerate(results, 1):
-        print(f"{rank}. URL: {url}, Score: {score:.4f}")
-    return "Good Test Run"
+    return jsonify(results, totalTime)
 
-# command to run -> python3 searchEngine.py "path to final_index"
 if __name__ == "__main__":
     engine = SearchEngine("/Users/bevinhuynh/SearchEngine/final_index.json")
     app.run(host='0.0.0.0', port=1410)
@@ -62,6 +58,17 @@ if __name__ == "__main__":
 
 
 
+ # startTime = time.perf_counter()
+    # results = engine.search(query)
+    # endTime = time.perf_counter()
+    # totalTime = (endTime - startTime) * 1000
+    # print(f"Query processed in {totalTime:.2f} ms")
+    # for rank, (url, score) in enumerate(results, 1):
+    #     print(f"{rank}. URL: {url}, Score: {score:.4f}")
+    # return results
+
+
+    # results = jsonify(engine.search(query), 12)
 
 
 
@@ -73,9 +80,7 @@ if __name__ == "__main__":
 
 
 
-
-
-
+# command to run -> python3 searchEngine.py "path to final_index"
 
     # import argparse
 
