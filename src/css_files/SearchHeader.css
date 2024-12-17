@@ -1,0 +1,103 @@
+#zottle-logo-header{
+    font-family: sans-serif;
+    letter-spacing: 1px;
+    font-size: 2.3em;
+    display: flex;
+    margin-left: 1em;
+    margin-top: 0.5em;
+    width: fit-content;
+  }
+
+ #anteater-header{
+    display: flex;
+    height: 6.5em;
+    will-change: filter;
+    transition: filter 300ms;
+    margin-left: 10em;
+    margin-top: -5em;
+  }
+  
+.letter.z { color: #4285F4; }   
+.letter.o1 { color: #EA4335; }  
+.letter.t1 { color: #FBBC05; }  
+.letter.t2 { color: #4285F4; }  
+.letter.l { color: #34A853; }   
+.letter.e { color: #EA4335; }  
+
+
+#search-header {
+    position: relative;
+    margin-bottom: 40em;
+    width: 90em;
+    border-bottom: 1px solid grey;
+    padding-bottom: 50px;
+    border-color: grey;
+
+}
+
+#search-bar-form-header {
+  background-color: grey;
+  display: flex;
+  align-items: center;
+  width: 50%;
+  height: 55px;
+  /* padding: 0; */
+  /* margin: 0; */
+  border-radius: 9999px;
+  margin-left: 18.5em;
+  margin-top: -5em;
+
+}
+
+#search-bar-form-header:hover {
+  background-color: rgb(154, 154, 154);
+}
+
+#search-bar-form:focus-within{
+  background-color: grey;
+}
+
+/* the actual input box */
+#search-bar-header {
+  width: 100%;
+  height: 100%;
+  background-color: grey;
+  padding: 8px 40px 8px 20px;
+  border-radius: 9999px;
+  margin-bottom: 0;
+  border: none;
+  background-color: transparent;
+
+}
+
+#search-bar-header:focus {
+  border: none;
+  outline:none;
+}
+
+
+#search-img-header {
+  width: 2.0em;
+  height: 1.2em;
+  margin-right: 10px;
+}
+
+#search-img-header:hover {
+  cursor: pointer;
+}
+
+/* the container, not the the actual input box */
+#searchbar-header {  
+  background-color: grey;
+  width: 35em;
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: white;
+}
+
+#search-bar-header::placeholder {
+  color: white;
+}
+

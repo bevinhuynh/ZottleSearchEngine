@@ -1,10 +1,10 @@
-import "../App.css"
+// import "../App.css"
+import "../css_files/SearchHeader.css"
 
 function SearchHeader() {
     return (
         <>
-        <header className="mt-auto" id="search-page">
-            <div className='row' id='title'>
+        <header id="search-header">
             <h1 id='zottle-logo-header'>
                 <span className="letter z">Z</span>
                 <span className="letter o1">o</span>
@@ -13,10 +13,16 @@ function SearchHeader() {
                 <span className="letter l">l</span>
                 <span className="letter e">e</span>
             </h1>
-            </div>
+            <img src="../src/assets/anteater.svg" className="anteater" alt="Anteater logo" id="anteater-header" />
+            <form id='search-bar-form-header'>
+                <input id='search-bar-header' placeholder='Search Zoogle'></input>
+                <img id='search-img-header' src='../src/assets/searchimg.svg'></img>
+            </form>
         </header>
         </>
     )
 }
 
 export default SearchHeader
+
+                       

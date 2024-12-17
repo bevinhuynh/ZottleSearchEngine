@@ -103,9 +103,6 @@
 
 }
 
-
-
-
 #search-bar:focus {
   border: none;
   outline:none;
@@ -179,9 +176,6 @@
   margin-bottom: 15em;
 }
 
-
-#search-page-header {
-  position: absolute;
-  top:0;
-  left: 0;
+#url {
+  font-size: 30px;
 }
