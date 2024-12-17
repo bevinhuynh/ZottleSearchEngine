@@ -58,17 +58,6 @@ if __name__ == "__main__":
 
 
 
- # startTime = time.perf_counter()
-    # results = engine.search(query)
-    # endTime = time.perf_counter()
-    # totalTime = (endTime - startTime) * 1000
-    # print(f"Query processed in {totalTime:.2f} ms")
-    # for rank, (url, score) in enumerate(results, 1):
-    #     print(f"{rank}. URL: {url}, Score: {score:.4f}")
-    # return results
-
-
-    # results = jsonify(engine.search(query), 12)
 
 
 

@@ -1,8 +1,20 @@
 import {changeThemeMode, fetch_query_results} from "./helpers"
 import './App.css'
 import AboutHeader from "./AboutHeader"
+import { useNavigate } from "react-router";
 
-function App() {
+function HomePage() {
+  const navigate = useNavigate();
+  
+  const handleClick = async () => {
+    const results = await fetch_query_results();
+    navigate("/search", { 
+      state: {
+        searchResults: results
+      }
+    })
+    
+  };
 
   return (
     <>
@@ -24,12 +36,14 @@ function App() {
         <div className='row' id='searchbar'>
           <form id='search-bar-form'>
             <input id='search-bar' placeholder='Search Zoogle'></input>
-            <img id='searchimg' src='../src/assets/searchimg.svg'></img>
+            <a onClick={handleClick}>
+              <img id='search-img' src='../src/assets/searchimg.svg'></img>
+            </a>
           </form>
         </div>
         <div className='row' id="buttons">
           <div className='col' id='search-button'>
-            <button onClick={fetch_query_results}>Zoogle Search</button>
+            <button onClick={handleClick}>Zoogle Search</button>
           </div>
           <div className='col' id='lucky-button'>
             <button>I'm feeling lucky</button> 
@@ -45,4 +59,4 @@ function App() {
   )
 }
 
-export default App
+export default HomePage
