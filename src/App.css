@@ -47,12 +47,20 @@
   
 }
 
+#about-link:hover{
+  text-decoration: underline;
+}
+
 #github-link {
   position: absolute;
   top: 1em;
   left: 6em;
   font-size: 1em;
   color: white;
+}
+
+#github-link:hover {
+  text-decoration: underline;
 }
 
 #buttons {
@@ -125,7 +133,7 @@
   color: white;
 }
 
-#zoogle-logo {
+#zottle-logo {
   font-family: sans-serif;
   letter-spacing: 1px;
   font-size: 4.5em;
@@ -133,8 +141,8 @@
 
 .letter.z { color: #4285F4; }   /* Z (Blue) */
 .letter.o1 { color: #EA4335; }  /* First o (Red) */
-.letter.o2 { color: #FBBC05; }  /* Second o (Yellow) */
-.letter.g { color: #4285F4; }   /* g (Blue) */
+.letter.t1 { color: #FBBC05; }  /* Second o (Yellow) */
+.letter.t2 { color: #4285F4; }   /* g (Blue) */
 .letter.l { color: #34A853; }   /* l (Green) */
 .letter.e { color: #EA4335; }   /* e (Red) */
 
@@ -160,7 +168,7 @@
 #footer-content:hover {
   cursor: pointer;
   text-decoration: underline;
-  
+
 }
 
 #main-container {

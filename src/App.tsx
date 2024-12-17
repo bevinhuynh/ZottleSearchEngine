@@ -1,11 +1,12 @@
 import {changeThemeMode} from "./helpers"
 import './App.css'
-
+import AboutHeader from "./AboutHeader"
 
 function App() {
 
   return (
     <>
+      <AboutHeader/>
       <div className='container-fluid' id="main-container">
         <div className='row'>
           <a>
@@ -13,10 +14,10 @@ function App() {
           </a>
         </div>
         <div className='row' id='title'>
-          <h1 id='zoogle-logo'><span className="letter z">Z</span>
+          <h1 id='zottle-logo'><span className="letter z">Z</span>
           <span className="letter o1">o</span>
-          <span className="letter o2">o</span>
-          <span className="letter g">g</span>
+          <span className="letter t1">t</span>
+          <span className="letter t2">t</span>
           <span className="letter l">l</span>
           <span className="letter e">e</span></h1>
         </div>
