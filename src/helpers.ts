@@ -23,3 +23,17 @@ export function changeThemeMode() {
    }
 }
 
+export async function fetch_query_results() {
+    let search_input = document.getElementById("search-bar") as HTMLInputElement;
+    const response = await fetch("http://localhost:1410/process-query", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(search_input.value)
+    });
+    if (response.ok) {
+        console.log("good test run");
+    }
+    
+}

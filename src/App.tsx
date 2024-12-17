@@ -1,4 +1,4 @@
-import {changeThemeMode} from "./helpers"
+import {changeThemeMode, fetch_query_results} from "./helpers"
 import './App.css'
 import AboutHeader from "./AboutHeader"
 
@@ -29,7 +29,7 @@ function App() {
         </div>
         <div className='row' id="buttons">
           <div className='col' id='search-button'>
-            <button>Zoogle Search</button>
+            <button onClick={fetch_query_results}>Zoogle Search</button>
           </div>
           <div className='col' id='lucky-button'>
             <button>I'm feeling lucky</button> 

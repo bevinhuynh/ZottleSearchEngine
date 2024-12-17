@@ -3,7 +3,11 @@ import math
 from collections import defaultdict
 from nltk.stem.porter import PorterStemmer
 import time
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
+app = Flask(__name__)
+CORS(app)
 
 class SearchEngine:
     def __init__(self, index_path):
@@ -37,24 +41,60 @@ class SearchEngine:
         ranked_results = sorted(scores.items(), key=lambda x: x[1], reverse=True)
         return [(self.doc_urls[doc_id], score) for doc_id, score in ranked_results[:top_k]]
 
+
+@app.route("/process-query", methods=["POST"])
+def process_query():
+    query = request.json
+    startTime = time.perf_counter()
+    results = engine.search(query)
+    endTime = time.perf_counter()
+    totalTime = (endTime - startTime) * 1000
+    print(f"Query processed in {totalTime:.2f} ms")
+    for rank, (url, score) in enumerate(results, 1):
+        print(f"{rank}. URL: {url}, Score: {score:.4f}")
+    return "Good Test Run"
+
 # command to run -> python3 searchEngine.py "path to final_index"
 if __name__ == "__main__":
-    import argparse
+    engine = SearchEngine("/Users/bevinhuynh/SearchEngine/final_index.json")
+    app.run(host='0.0.0.0', port=1410)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("index_path", type=str, help="Path to the JSON index file.")
-    args = parser.parse_args()
-    engine = SearchEngine(args.index_path)
 
-    while True:
-        query = input("Enter query (type exit to stop): ")
-        if query.lower() == 'exit':
-            print("Exiting search engine.")
-            break
-        startTime = time.perf_counter()
-        results = engine.search(query)
-        endTime = time.perf_counter()
-        totalTime = (endTime - startTime) * 1000
-        print(f"Query processed in {totalTime:.2f} ms")
-        for rank, (url, score) in enumerate(results, 1):
-            print(f"{rank}. URL: {url}, Score: {score:.4f}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # import argparse
+
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument("index_path", type=str, help="Path to the JSON index file.")
+    # args = parser.parse_args()
+    # engine = SearchEngine(args.index_path)
+
+    # while True:
+    #     query = input("Enter query (type exit to stop): ")
+    #     if query.lower() == 'exit':
+    #         print("Exiting search engine.")
+    #         break
+    #     startTime = time.perf_counter()
+    #     results = engine.search(query)
+    #     endTime = time.perf_counter()
+    #     totalTime = (endTime - startTime) * 1000
+    #     print(f"Query processed in {totalTime:.2f} ms")
+    #     for rank, (url, score) in enumerate(results, 1):
+    #         print(f"{rank}. URL: {url}, Score: {score:.4f}")
+
+            
