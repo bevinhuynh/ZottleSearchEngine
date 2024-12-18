@@ -140,12 +140,12 @@
   font-size: 4.5em;
 }
 
-.letter.z { color: #4285F4; }   /* Z (Blue) */
-.letter.o1 { color: #EA4335; }  /* First o (Red) */
-.letter.t1 { color: #FBBC05; }  /* Second o (Yellow) */
-.letter.t2 { color: #4285F4; }   /* g (Blue) */
-.letter.l { color: #34A853; }   /* l (Green) */
-.letter.e { color: #EA4335; }   /* e (Red) */
+.letter.z { color: #4285F4; }   
+.letter.o1 { color: #EA4335; } 
+.letter.t1 { color: #FBBC05; }  
+.letter.t2 { color: #4285F4; }  
+.letter.l { color: #34A853; }   
+.letter.e { color: #EA4335; }  
 
 #setting-footer {
   display: flex;
@@ -173,9 +173,12 @@
 }
 
 #main-container {
-  margin-bottom: 15em;
+  margin-top: 5em;
 }
 
 #url {
-  font-size: 30px;
+  display:inline;
+  font-size: 10px;
 }
+
+
