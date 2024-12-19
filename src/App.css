@@ -151,7 +151,7 @@
   display: flex;
   background-color: rgb(41, 39, 39);
   width: 100vw; 
-  position: fixed; 
+  position: absolute; 
   bottom: 0;
   left: 0;
   height: 50px;
@@ -180,5 +180,3 @@
   display:inline;
   font-size: 10px;
 }
-
-

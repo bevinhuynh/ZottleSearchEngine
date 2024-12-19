@@ -8,6 +8,10 @@
     width: fit-content;
   }
 
+#zottle-logo-header:hover {
+  cursor: pointer;
+}
+
  #anteater-header{
     display: flex;
     height: 6.5em;
@@ -26,12 +30,11 @@
 
 
 #search-header {
-  /* background-color: white; */
   position: absolute;
-  padding-top: 1em;
+  padding-top: 0.4em;
   top: 0;
   left: 0;
-  padding-bottom: 2.7em;
+  padding-bottom: 2em;
   width: 100vw;
   border-bottom: 1px solid grey;
 }
@@ -93,7 +96,6 @@
   border-radius: 9999px;
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
   color: white;
 }
 
@@ -112,18 +114,17 @@
   color: blue;
   word-break: break-word;      /* Break long words (like URLs) */
   overflow-wrap: break-word;   /* Ensure wrapping within the container */
-  max-width: 100%;             /* Prevents overflow */
 }
 
 #url-container {
- 
   display:flex;
-  margin-left: 1en;
+  /* margin-left: 1em; */
   justify-content: left;
   flex-direction: column;
   width: 100%;
   justify-content: left;
-  margin-right: 5em;
+  margin-top: -1.5em;
+  /* background-color: white;  */
 }
 
 #url-link {
@@ -131,8 +132,9 @@
   justify-content: flex-start;
   padding-bottom: 4px;
   color: #4285F4;
-  font-size: 16px;
+  font-size: 15.5px;
   text-align: left;
+
 }
 
 #url-link:hover{
@@ -155,4 +157,52 @@
   align-items: left;
   /* background-color: white; */
   width: 100vw;
+}
+
+#setting-footer-searchpage{
+  display: flex;
+  background-color: rgb(41, 39, 39);
+  width: 100vw; 
+  height: 50px;
+}
+
+#footer-content-searchpage{
+  position: absolute;
+  right: 0;
+  margin-top: 1em;
+  margin-right: 1.5em;
+  color: rgb(218, 211, 211);
+  font-size: 0.8em;
+}
+
+#footer-content-searchpage:hover {
+  cursor: pointer;
+  text-decoration: underline;
+
+}
+
+#query-time {
+  color: rgb(218, 211, 211);
+  margin-top: 1em;
+  font-size: 0.8em;
+  margin-left: 1.5em;
+  font-weight: bold;
+}
+
+#about-in-footer {
+  position: absolute;
+  right: 0;
+  margin-top: 1em;
+  margin-right: 13em;
+  color: rgb(218, 211, 211);
+  font-size: 0.8em;
+}
+
+#github-in-footer {
+  position: absolute;
+  right: 0;
+  margin-top: 1em;
+  margin-right: 8em;
+  color: rgb(218, 211, 211);
+  font-size: 0.8em;
 }
