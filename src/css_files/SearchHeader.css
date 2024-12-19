@@ -118,12 +118,13 @@
 
 #url-container {
   display:flex;
-  /* margin-left: 1em; */
   justify-content: left;
   flex-direction: column;
   width: 100%;
   justify-content: left;
   margin-top: -1.5em;
+  flex: 1; /* This makes the content area expand to fill the available space */
+
   /* background-color: white;  */
 }
 
@@ -155,17 +156,30 @@
 #total-container {
   display: flex;
   align-items: left;
-  /* background-color: white; */
+  flex-direction: column; /* Stack content vertically */
+  flex: 1;
   width: 100vw;
 }
 
-#setting-footer-searchpage{
+#searchpage-container {
   display: flex;
-  background-color: rgb(41, 39, 39);
-  width: 100vw; 
-  height: 50px;
+  flex-direction: column; /* Stack elements vertically */
+  min-height: 100%; /* Ensure the container fills the viewport height */
+  /* background-color: white; */
 }
 
+#setting-footer-searchpage {
+  background-color: rgb(41, 39, 39);
+  width: 100%; /* Full width */
+  height: 50px;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  box-sizing: border-box; 
+  padding: 0 1.5em;
+  position: relative;
+  bottom: 0px;
+}
 #footer-content-searchpage{
   position: absolute;
   right: 0;
@@ -205,4 +219,9 @@
   margin-right: 8em;
   color: rgb(218, 211, 211);
   font-size: 0.8em;
+}
+
+html, body {
+  height: 100%; 
+  margin: 0; /* Remove default margins */
 }

@@ -1,11 +1,21 @@
 // import "../App.css"
 import { useNavigate } from "react-router-dom";
 import "../css_files/SearchHeader.css"
+import { fetch_query_results } from "../helpers";
 
 function SearchHeader() {
     const navigate = useNavigate();
     const returnToHome = () => {
-        navigate('/')
+        navigate("/")
+    };
+    const searchQuery = async () => {
+        const results = await fetch_query_results();
+        navigate("/search", {
+            state: {
+                searchResults: results,
+                query: "hello"
+            }
+        })
     }
     return (
         <>
@@ -20,8 +30,8 @@ function SearchHeader() {
             </h1>
             <img src="../src/assets/anteater.svg" className="anteater" alt="Anteater logo" id="anteater-header"/>
             <form id='search-bar-form-header'>
-                <input id='search-bar-header' placeholder='Search Zottle'></input>
-                <img id='search-img-header' src='../src/assets/searchimg.svg'></img>
+                <input id='search-bar' placeholder='Search Zottle'></input>
+                <img id='search-img' src='../src/assets/searchimg.svg' onClick={searchQuery}></img>
             </form>
         </header>
         </>
