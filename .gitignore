@@ -5,6 +5,9 @@ output_data.json
 __pycache__/
 output_analytics.txt
 results.txt
+tempinvertedindex.py
+tempsearchengine.py
+test.py
 
 # # Logs
 # logs

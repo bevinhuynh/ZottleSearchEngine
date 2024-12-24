@@ -5,6 +5,7 @@ from nltk.stem.porter import PorterStemmer
 import time
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from pymongo import MongoClient
 
 app = Flask(__name__)
 CORS(app)
@@ -15,6 +16,9 @@ class SearchEngine:
         self.index = self.index_data['index']
         self.doc_urls = self.index_data['doc_urls']
         self.stemmer = PorterStemmer()
+        self.db = MongoClient("localhost", 27017)
+        self.collection = self.db.searchEngine.finalIndex
+        self.document_count = self.db.searchEngine.finalIndexMetadata.find_one()["doc_count"]
 
     def load_index(self, index_path):
         with open(index_path, 'r', encoding='utf-8') as file:
@@ -29,12 +33,18 @@ class SearchEngine:
         scores = defaultdict(float)
         query_weights = {token: 1 + math.log10(query_tokens.count(token)) for token in query_tokens}
 
+        token_docs = {
+            doc["_id"]: doc
+            for doc in self.collection.find({"_id": {"$in": query_tokens}})
+        }
+
         for token in query_tokens:
-            if token not in self.index:
+            if token not in token_docs:
                 continue
-            postings = self.index[token]['doc_ids']
-            idf = math.log10(self.index_data['doc_count'] / self.index[token]['document_freq'])
-            for doc_id, doc_data in postings.items():
+            postings = token_docs[token]
+            idf = math.log10(self.document_count / postings['document_freq'])
+
+            for doc_id, doc_data in postings["doc_ids"].items():
                 tf_idf = doc_data['tf_idf']
                 scores[doc_id] += query_weights[token] * tf_idf
 
@@ -54,41 +64,3 @@ def process_query():
 if __name__ == "__main__":
     engine = SearchEngine("/Users/bevinhuynh/SearchEngine/final_index.json")
     app.run(host='0.0.0.0', port=1410)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# command to run -> python3 searchEngine.py "path to final_index"
-
-    # import argparse
-
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument("index_path", type=str, help="Path to the JSON index file.")
-    # args = parser.parse_args()
-    # engine = SearchEngine(args.index_path)
-
-    # while True:
-    #     query = input("Enter query (type exit to stop): ")
-    #     if query.lower() == 'exit':
-    #         print("Exiting search engine.")
-    #         break
-    #     startTime = time.perf_counter()
-    #     results = engine.search(query)
-    #     endTime = time.perf_counter()
-    #     totalTime = (endTime - startTime) * 1000
-    #     print(f"Query processed in {totalTime:.2f} ms")
-    #     for rank, (url, score) in enumerate(results, 1):
-    #         print(f"{rank}. URL: {url}, Score: {score:.4f}")
-
-            

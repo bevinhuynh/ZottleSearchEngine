@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import SearchHeader from "../components/SearchHeader";
 import QueryDisplay from "../components/QueryDisplay";
 import { changeThemeMode } from "../helpers";
@@ -32,7 +32,7 @@ function SearchPage() {
         </div>
         <footer id='setting-footer-searchpage'>
             <p id='footer-content-searchpage' onClick={changeThemeMode}>Dark Mode</p>
-            <p id='query-time'>Search result processed in {queryTime} seconds</p>
+            <p id='query-time'>Search result processed in {queryTime} milliseconds</p>
             <p id='about-in-footer'>About</p>
             <p id='github-in-footer'>Github</p>
         </footer>     
