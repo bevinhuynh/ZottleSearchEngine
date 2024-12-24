@@ -39,4 +39,17 @@ export async function fetch_query_results() {
     
 }
 
+export async function handleLuckyButton() {
+    const response = await fetch("http://localhost:1410/lucky-query", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }) 
+    if (response.ok) {
+        const trigram = response.json();
+        console.log(trigram)
+    }          
+}
+
 

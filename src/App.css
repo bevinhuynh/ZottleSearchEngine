@@ -47,6 +47,14 @@
   
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: #fff !important;
+}
+
 #about-link:hover{
   text-decoration: underline;
 }
@@ -72,7 +80,6 @@
 
 
 #search-bar-form {
-  background-color: grey;
   display: flex;
   align-items: center;
   width:100%;
@@ -80,6 +87,7 @@
   padding: 0;
   margin: 0;
   border-radius: 9999px;
+
 }
 
 #search-bar-form:hover {
@@ -87,7 +95,7 @@
 }
 
 #search-bar-form:focus-within{
-  background-color: grey;
+  background-color: grey
 }
 
 /* the actual input box */
@@ -103,10 +111,12 @@
 
 }
 
+
 #search-bar:focus {
   border: none;
   outline:none;
 }
+
 
 
 #search-img {
