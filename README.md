@@ -1,50 +1,28 @@
-# React + TypeScript + Vite
+Zottle Search Engine:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Backend dependencies:
+- Use pip install or pip3 install
+- pip install nltk
+- pip install 
+- pip install flask
+- pip install flask-cors
+- pip install pymongo
+- pip install beautifulsoup4
 
-Currently, two official plugins are available:
+Frontend dependencies:
+- npm install
+- npm install react react-dom react-router-dom
+- npm i bootstrap@5.3.3
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+MongoDB installation: 
+- https://www.mongodb.com/docs/manual/installation/
+  - Make sure you install based on your operating system (Windows, macOS, Docker, or Linux)
+- For VSCode, install the MongoDB extension
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+To run the project:
+- npm run dev to run the website
+- python3 searchEngine.py to activate the Flask server
+- For macOS: brew services start mongodb-community@8.0
+  - right click on the database to connect (on VScode)
+- For Windows, Linux, Docker: TBD
