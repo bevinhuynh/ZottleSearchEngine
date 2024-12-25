@@ -18,6 +18,7 @@ if (!localStorage.getItem('currentTheme')) {
   console.log("Initialized both themes in local storage");
 }
 
+console.log(localStorage)
 
 const currentTheme = localStorage.getItem('currentTheme');
 let current_mode = document.getElementById("footer-content");

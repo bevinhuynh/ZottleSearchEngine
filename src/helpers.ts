@@ -32,6 +32,10 @@ export function changeThemeMode() {
 
 export async function fetch_query_results() {
     let search_input = document.getElementById("search-bar") as HTMLInputElement;
+    if( !search_input.value.trim().length ) {
+        return;
+    }
+
     const response = await fetch("http://localhost:1410/process-query", {
         method: 'POST',
         headers: {
