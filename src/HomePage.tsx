@@ -1,9 +1,13 @@
-import {changeThemeMode, fetch_query_results} from "./helpers"
+import {applyHomePageTheme,  changeThemeMode, fetch_query_results} from "./helpers"
 import './App.css'
 import AboutHeader from "./AboutHeader"
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 function HomePage() {
+  useEffect(() => {
+    applyHomePageTheme();
+  }, [])
   const navigate = useNavigate();
   
   const handleClick = async () => {

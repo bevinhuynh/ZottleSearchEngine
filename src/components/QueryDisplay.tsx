@@ -10,7 +10,7 @@ const QueryDisplay: React.FC<QueryDisplayProps> = ({url, tfidf, index_num}) =>  
     return (
         <div>
             <a id="url-link" href={url}>{index_num}.&nbsp;&nbsp;{url}</a>
-            <p id="tf-idf-score"> - TF-IDF score: {tfidf}</p>
+            <p className="tf-idf-score"> - TF-IDF score: {tfidf}</p>
         </div>
     )
     

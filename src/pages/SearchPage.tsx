@@ -1,9 +1,13 @@
 import { useLocation } from "react-router";
 import SearchHeader from "../components/SearchHeader";
 import QueryDisplay from "../components/QueryDisplay";
-import { changeThemeMode } from "../helpers";
+import { applyTfidfColor, changeSearchPageTheme, changeThemeMode } from "../helpers";
+import { useEffect } from "react";
 
 function SearchPage() {
+  useEffect(() =>{
+    applyTfidfColor();
+  }, []);
   const results = useLocation();  // Extract search results from useLocation
   const urlArray = results.state.searchResults[0]
   const queryTime = results.state.searchResults[1].toFixed(2);
@@ -31,7 +35,7 @@ function SearchPage() {
         
         </div>
         <footer id='setting-footer-searchpage'>
-            <p id='footer-content-searchpage' onClick={changeThemeMode}>Dark Mode</p>
+            <p id='footer-content-searchpage' onClick={changeSearchPageTheme}>Dark Mode</p>
             <p id='query-time'>Search result processed in {queryTime} milliseconds</p>
             <p id='about-in-footer'>About</p>
             <p id='github-in-footer'>Github</p>
