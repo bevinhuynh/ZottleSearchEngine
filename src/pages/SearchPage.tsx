@@ -9,15 +9,18 @@ function SearchPage() {
     applyTfidfColor();
   }, []);
   const results = useLocation();  // Extract search results from useLocation
+  // console.log(results.state)
   const urlArray = results.state.searchResults[0]
   const queryTime = results.state.searchResults[1].toFixed(2);
+
+
   
   return (
     <>
     <div id="searchpage-container">
       <div className="container" id="header-container">
           <div className="row">
-            <SearchHeader/>
+            <SearchHeader queryValue={results.state.query}/>
           </div>
         </div>
         <div id="total-container">

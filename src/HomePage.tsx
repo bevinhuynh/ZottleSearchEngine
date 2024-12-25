@@ -12,19 +12,22 @@ function HomePage() {
   
   const handleClick = async () => {
     const results = await fetch_query_results();
-    navigate("/search", { 
-      state: {
-        searchResults: results
-      }
-    })
-    
+    if (results) {
+      navigate("/search", { 
+        state: {
+          searchResults: results[0],
+          query: results[1]
+        }
+      })
+    }
   };
 
   const handleLuckyClick = async () => {
     const results = await handleLuckyButton();
     navigate("/search", { 
       state: {
-        searchResults: results
+        searchResults: results,
+        query: results[2]
       }
     })
   }

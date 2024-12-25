@@ -40,7 +40,10 @@ export async function fetch_query_results() {
         body: JSON.stringify(search_input.value)
     });
     if (response.ok) {
-        return await response.json();
+        let results = []
+        let responseResult = await response.json()
+        results.push(responseResult, search_input.value)
+        return results
     }
 }
 
@@ -52,8 +55,7 @@ export async function handleLuckyButton() {
         }
     }) 
     if (response.ok) {
-        const trigram = await response.json();
-        return trigram
+        return await response.json()
     }          
 }
 

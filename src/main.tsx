@@ -9,7 +9,7 @@ if (!localStorage.getItem('currentTheme')) {
   localStorage.setItem('darkMode', "Dark Mode");
   localStorage.setItem('darkColor', '#3f3f3f');
   localStorage.setItem('lightMode', 'Light Mode')
-  localStorage.setItem('lightColor', '#ffffff')
+  localStorage.setItem('lightColor', '#c2c5c9')
   localStorage.setItem('currentTheme', 'darkMode')
   const darkColor = localStorage.getItem('darkColor');
   if (darkColor) {
@@ -17,6 +17,7 @@ if (!localStorage.getItem('currentTheme')) {
   }
   console.log("Initialized both themes in local storage");
 }
+
 
 const currentTheme = localStorage.getItem('currentTheme');
 let current_mode = document.getElementById("footer-content");

@@ -83,7 +83,7 @@ def getRandomQuery():
     results = engine.search(query)
     endTime = time.perf_counter()
     totalTime = (endTime - startTime) * 1000
-    return jsonify(results, totalTime)
+    return jsonify(results, totalTime, query)
 
 if __name__ == "__main__":
     engine = SearchEngine()
