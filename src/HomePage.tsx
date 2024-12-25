@@ -1,4 +1,4 @@
-import {applyHomePageTheme,  changeThemeMode, fetch_query_results} from "./helpers"
+import {applyHomePageTheme,  changeThemeMode, fetch_query_results, handleLuckyButton} from "./helpers"
 import './App.css'
 import AboutHeader from "./AboutHeader"
 import { useNavigate } from "react-router";
@@ -19,6 +19,15 @@ function HomePage() {
     })
     
   };
+
+  const handleLuckyClick = async () => {
+    const results = await handleLuckyButton();
+    navigate("/search", { 
+      state: {
+        searchResults: results
+      }
+    })
+  }
 
   return (
     <>
@@ -51,7 +60,7 @@ function HomePage() {
             <button onClick={handleClick}>Zoogle Search</button>
           </div>
           <div className='col' id='lucky-button'>
-            <button>I'm feeling lucky</button> 
+            <button onClick={handleLuckyClick}>I'm feeling lucky</button> 
           </div>
         </div>      
       </div>

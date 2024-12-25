@@ -70,8 +70,20 @@ def process_query():
     totalTime = (endTime - startTime) * 1000
     return jsonify(results, totalTime)
 
-
-
+@app.route("/random-query", methods=["POST"])
+def getRandomQuery():
+    db = MongoClient("localhost", 27017)
+    searchEngine = db.searchEngine
+    final_index = searchEngine.finalIndex
+    word1 = final_index.aggregate([{'$sample' : {'size': 1}}]).next().get("_id")
+    word2 = final_index.aggregate([{'$sample' : {'size': 1}}]).next().get("_id")
+    word3 = final_index.aggregate([{'$sample' : {'size': 1}}]).next().get("_id")
+    query = word1 + " " + word2 + " " + word3
+    startTime = time.perf_counter()
+    results = engine.search(query)
+    endTime = time.perf_counter()
+    totalTime = (endTime - startTime) * 1000
+    return jsonify(results, totalTime)
 
 if __name__ == "__main__":
     engine = SearchEngine()

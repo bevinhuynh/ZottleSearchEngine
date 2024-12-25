@@ -1,7 +1,7 @@
 import { useLocation } from "react-router";
 import SearchHeader from "../components/SearchHeader";
 import QueryDisplay from "../components/QueryDisplay";
-import { applyTfidfColor, changeSearchPageTheme, changeThemeMode } from "../helpers";
+import { applyTfidfColor, changeSearchPageTheme } from "../helpers";
 import { useEffect } from "react";
 
 function SearchPage() {

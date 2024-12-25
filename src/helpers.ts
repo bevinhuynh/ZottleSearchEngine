@@ -42,20 +42,18 @@ export async function fetch_query_results() {
     if (response.ok) {
         return await response.json();
     }
-
-    
 }
 
 export async function handleLuckyButton() {
-    const response = await fetch("http://localhost:1410/lucky-query", {
+    const response = await fetch("http://localhost:1410/random-query", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         }
     }) 
     if (response.ok) {
-        const trigram = response.json();
-        console.log(trigram)
+        const trigram = await response.json();
+        return trigram
     }          
 }
 
