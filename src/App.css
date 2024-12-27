@@ -62,7 +62,7 @@ input:-webkit-autofill:active {
 #github-link {
   position: absolute;
   top: 1em;
-  left: 6em;
+  left: 2em;
   font-size: 1em;
   color: white;
 }

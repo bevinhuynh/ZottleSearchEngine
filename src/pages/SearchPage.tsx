@@ -40,8 +40,10 @@ function SearchPage() {
         <footer id='setting-footer-searchpage'>
             <p id='footer-content-searchpage' onClick={changeSearchPageTheme}>Dark Mode</p>
             <p id='query-time'>Search result processed in {queryTime} milliseconds</p>
-            <p id='about-in-footer'>About</p>
-            <p id='github-in-footer'>Github</p>
+            {/* <a href='https://www.google.com/'id='about-in-footer'>About</a>   */}
+            {/* <p id='about-in-footer' onClick>About</p> */}
+            <a href='https://github.com/TaylorTraan/SearchEngine' id='github-in-footer'>Github</a>                                  
+
         </footer>     
     </div>
     </>

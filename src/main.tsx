@@ -4,6 +4,7 @@ import './index.css'
 import HomePage from './HomePage.tsx'
 import SearchPage from './pages/SearchPage.tsx'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import AboutPage from './pages/AboutPage.tsx'
 
 if (!localStorage.getItem('currentTheme')) {
   localStorage.setItem('darkMode', "Dark Mode");
@@ -23,7 +24,7 @@ console.log(localStorage)
 const currentTheme = localStorage.getItem('currentTheme');
 let current_mode = document.getElementById("footer-content");
 let github = document.getElementById("github-link");
-let about = document.getElementById("about-link");
+// let about = document.getElementById("about-link");
 if (currentTheme == 'darkMode') {
     const darkColor = localStorage.getItem('darkColor');
     if (darkColor) {
@@ -39,9 +40,9 @@ else {
 
 
   if (currentTheme == 'darkMode') {
-    if (github && about) {
+    if (github) {
       github.style.color = 'black';
-      about.style.color = 'black';
+      // about.style.color = 'black';
     }
     if (current_mode) {
       console.log('yes');
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
   {
     path:'/search',
     element: <SearchPage/>
+  },
+  {
+    path:'/about',
+    element:<AboutPage/>
   }
     
 ]);

@@ -32,6 +32,10 @@ function HomePage() {
     })
   }
 
+  // const navigateToAbout = () => {
+  //   navigate("/about");
+  // }
+
   return (
     <>
       

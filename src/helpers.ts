@@ -2,7 +2,7 @@
 export function changeThemeMode() {
     let current_mode = document.getElementById("footer-content");
     let github = document.getElementById("github-link");
-    let about = document.getElementById("about-link");
+    // let about = document.getElementById("about-link");
 
     if (current_mode?.innerHTML === "Dark Mode") {
         const lightColor = localStorage.getItem('lightColor');
@@ -11,9 +11,9 @@ export function changeThemeMode() {
         }
         current_mode.innerHTML = "Light Mode";
         localStorage.setItem('currentTheme', 'lightMode'); // Persist the current mode
-        if (github && about) {
+        if (github) {
             github.style.color = 'black';
-            about.style.color = 'black';
+            // about.style.color = 'black';
         }
         return;
     }
@@ -22,9 +22,9 @@ export function changeThemeMode() {
         document.body.style.backgroundColor = "#3f3f3f";
         current_mode.innerHTML = "Dark Mode";
         localStorage.setItem('currentTheme', 'darkMode'); // Persist the current mode
-        if (github && about) {
+        if (github) {
             github.style.color = 'white';
-            about.style.color = 'white';
+            // about.style.color = 'white';
         }
         return;
     }
@@ -67,20 +67,20 @@ export function applyHomePageTheme() {
     const currentTheme = localStorage.getItem('currentTheme');
     const current_mode = document.getElementById("footer-content");
     const github = document.getElementById("github-link");
-    const about = document.getElementById("about-link");
+    // const about = document.getElementById("about-link");
     if (currentTheme === 'darkMode') {
-        if (github && about) {
+        if (github) {
             github.style.color = 'white';
-            about.style.color = 'white';
+            // about.style.color = 'white';
           }
         if (current_mode) {
             current_mode.innerHTML = "Dark Mode";
         }
     } 
     else {
-        if (github && about) {
+        if (github) {
             github.style.color = 'black';
-            about.style.color = 'black';
+            // about.style.color = 'black';
           }
         if (current_mode) {
             current_mode.innerHTML = "Light Mode";
